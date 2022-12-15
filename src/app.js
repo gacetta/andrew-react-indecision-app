@@ -3,40 +3,61 @@ console.log('App.js is running!')
 const app = {
   title: 'Did you fart loudly?',
   subtitle: 'Acceptable responses',
-  options: ['One', 'Two']
+  options: []
 }
 
-const template = (
-  <div>
-    <h1>{app.title}</h1>
-    {app.subtitle && <p>{app.subtitle}</p>}
-    <p>{app.options.length > 0 ? 'Here are your options' : 'No options'}</p>
-    <ul>
-      <li>Hey Matt PFFFFFTTTTTTTTTT! (embarassed)</li>
-      <li>no way, (silent..pfffffffff)</li>
-    </ul>
-  </div>
-);
+const onFormSubmit = (e) => {
+  e.preventDefault();
 
-const user = {
-  name: 'sarah sugar smacks',
-  age: 23,
-  location: 'Candyland'
-}
+  const option = e.target.elements.option.value;
 
-const getLocation = (location) => {
-  if (location) {
-    return <p>Location: {location}</p>
+  if (option) {
+    app.options.push(option);
+    e.target.elements.option.value = '';
+    console.log(app.options)
+    renderIndecisionApp();
   }
-};
+}
 
-const templateTwo = (
-  <div>
-    <h1>{user.name ? user.name : 'Anonymous'}</h1>
-    {(user.age && user.age > 18) && <p>Age: {user.age}</p>}
-    {getLocation(user.location)}
-  </div>
-);
+const onMakeDecision = () => {
+  // generate random number
+  // return that element from options array
+  const length = app.options.length;
+  const randomIndex = Math.floor(Math.random() * length); 
+  const option = app.options[randomIndex]
+  alert(option)
+}
+
+const onClick = () => {
+  app.options = [],
+  renderIndecisionApp();
+}
+
+
 let appRoot = document.getElementById('app');
 
-ReactDOM.render(template, appRoot);
+const numbers = [9023, 8452, 8];
+
+const renderIndecisionApp = () => {
+  const template = (
+    <div>
+      <h1>{app.title}</h1>
+      {app.subtitle && <p>{app.subtitle}</p>}
+      <p>{app.options.length > 0 ? 'Here are your options' : 'No options'}</p>
+      <button disabled={(app.options.length === 0)} onClick={onMakeDecision}>What should I do?</button>
+      <button onClick={onClick}>Remove All</button>
+      <ol>
+        {
+          app.options.map((option, index) => <li key={index}>{option}</li>)
+        }
+      </ol>
+      <form onSubmit={onFormSubmit}>
+        <input type="text" name="option"></input>
+        <button>Add Option</button>
+      </form>
+    </div>
+  )
+  ReactDOM.render(template, appRoot);
+}
+
+renderIndecisionApp();
