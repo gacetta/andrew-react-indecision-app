@@ -1,0 +1,14 @@
+{
+  "name": "andrew-react-indecision-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:gacetta/andrew-react-indecision-app.git",
+  "author": "gacetta <78240758+gacetta@users.noreply.github.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "@babel/preset-react": "^7.18.6"
+  }
+}
