@@ -1,6 +1,12 @@
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
@@ -13,137 +19,213 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var obj = {
-  name: 'Joesph Eddie',
-  getname: function getname() {
-    return this.name;
-  }
-};
 var IndecisionApp = /*#__PURE__*/function (_React$Component) {
   _inherits(IndecisionApp, _React$Component);
   var _super = _createSuper(IndecisionApp);
-  function IndecisionApp() {
+  function IndecisionApp(props) {
+    var _this;
     _classCallCheck(this, IndecisionApp);
-    return _super.apply(this, arguments);
+    _this = _super.call(this, props);
+    _this.handleDeleteOptions = _this.handleDeleteOptions.bind(_assertThisInitialized(_this));
+    _this.handlePick = _this.handlePick.bind(_assertThisInitialized(_this));
+    _this.handleAddOption = _this.handleAddOption.bind(_assertThisInitialized(_this));
+    _this.handleDeleteOption = _this.handleDeleteOption.bind(_assertThisInitialized(_this));
+    _this.state = {
+      options: []
+    };
+    return _this;
   }
   _createClass(IndecisionApp, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      try {
+        var jsonData = localStorage.getItem('options');
+        var options = JSON.parse(jsonData);
+        if (options) this.setState(function () {
+          return {
+            options: options
+          };
+        });
+      } catch (e) {
+        throw new Error(e);
+      }
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps, prevState) {
+      if (prevState.options.length !== this.state.options.length) {
+        var jsonData = JSON.stringify(this.state.options);
+        localStorage.setItem('options', jsonData);
+      }
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      console.log('componentWillUnmount');
+    }
+  }, {
+    key: "handleDeleteOptions",
+    value: function handleDeleteOptions() {
+      this.setState(function () {
+        return {
+          options: []
+        };
+      });
+    }
+  }, {
+    key: "handleDeleteOption",
+    value: function handleDeleteOption(optionToRemove) {
+      this.setState(function (prevState) {
+        return {
+          options: prevState.options.filter(function (option) {
+            return option !== optionToRemove;
+          })
+        };
+      });
+    }
+  }, {
+    key: "handlePick",
+    value: function handlePick() {
+      var randomNum = Math.floor(Math.random() * this.state.options.length);
+      var option = this.state.options[randomNum];
+      console.log(option);
+      alert(option);
+    }
+  }, {
+    key: "handleAddOption",
+    value: function handleAddOption(option) {
+      if (!option) {
+        return 'enter valid value to add item';
+      } else if (this.state.options.includes(option)) {
+        return 'This option already exists';
+      }
+      this.setState(function (prevState) {
+        return {
+          options: [].concat(_toConsumableArray(prevState.options), [option])
+        };
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
-      var title = 'Indecision Decision';
       var subtitle = 'Let a computer call the shots!';
-      var options = ['Thing One', 'Thing 2', 'tHIngFOur'];
       return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement(Header, {
-        title: title,
         subtitle: subtitle
-      }), /*#__PURE__*/React.createElement(Action, null), /*#__PURE__*/React.createElement(Options, {
-        options: options
-      }), /*#__PURE__*/React.createElement(AddOption, null));
+      }), /*#__PURE__*/React.createElement(Action, {
+        hasOptions: this.state.options.length > 0,
+        handlePick: this.handlePick
+      }), /*#__PURE__*/React.createElement(Options, {
+        options: this.state.options,
+        handleDeleteOptions: this.handleDeleteOptions,
+        handleDeleteOption: this.handleDeleteOption
+      }), /*#__PURE__*/React.createElement(AddOption, {
+        handleAddOption: this.handleAddOption
+      }));
     }
   }]);
   return IndecisionApp;
 }(React.Component);
-var Header = /*#__PURE__*/function (_React$Component2) {
-  _inherits(Header, _React$Component2);
-  var _super2 = _createSuper(Header);
-  function Header() {
-    _classCallCheck(this, Header);
-    return _super2.apply(this, arguments);
-  }
-  _createClass(Header, [{
-    key: "render",
-    value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, this.props.title), /*#__PURE__*/React.createElement("h2", null, this.props.subtitle));
+var Header = function Header(props) {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, props.title), props.subtitle && /*#__PURE__*/React.createElement("h2", null, props.subtitle));
+};
+Header.defaultProps = {
+  title: 'Indecision Decision'
+};
+
+// class Header extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <h1>{this.props.title}</h1>
+//         <h2>{this.props.subtitle}</h2>
+//       </div>
+//     )
+//   }
+// }
+
+var Action = function Action(props) {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+    onClick: props.handlePick,
+    disabled: !props.hasOptions
+  }, "What Should I Do, Mr. Roboto?"));
+};
+
+// class Action extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <button 
+//           onClick={this.props.handlePick}
+//           disabled={!this.props.hasOptions}
+//         >
+//           What Should I Do, Mr. Roboto?
+//         </button>
+//       </div>
+//     )
+//   }
+// }
+
+var Options = function Options(props) {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
+    onClick: props.handleDeleteOptions
+  }, "Remove All"), props.options.length === 0 && /*#__PURE__*/React.createElement("p", null, "No options to choose from"), props.options.map(function (option) {
+    return /*#__PURE__*/React.createElement(Option, {
+      key: option,
+      optionText: option,
+      handleDeleteOption: props.handleDeleteOption
+    });
+  }));
+};
+var Option = function Option(props) {
+  return /*#__PURE__*/React.createElement("div", null, props.optionText, /*#__PURE__*/React.createElement("button", {
+    onClick: function onClick(e) {
+      props.handleDeleteOption(props.optionText);
     }
-  }]);
-  return Header;
-}(React.Component);
-var Action = /*#__PURE__*/function (_React$Component3) {
-  _inherits(Action, _React$Component3);
-  var _super3 = _createSuper(Action);
-  function Action() {
-    _classCallCheck(this, Action);
-    return _super3.apply(this, arguments);
-  }
-  _createClass(Action, [{
-    key: "handlePick",
-    value: function handlePick() {
-      alert('handlePick');
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("button", {
-        onClick: this.handlePick
-      }, "What Should I Do, Mr. Roboto?"));
-    }
-  }]);
-  return Action;
-}(React.Component);
-var Options = /*#__PURE__*/function (_React$Component4) {
-  _inherits(Options, _React$Component4);
-  var _super4 = _createSuper(Options);
-  function Options(props) {
-    var _this;
-    _classCallCheck(this, Options);
-    _this = _super4.call(this, props);
-    _this.handleRemoveAll = _this.handleRemoveAll.bind(_assertThisInitialized(_this));
-    return _this;
-  }
-  _createClass(Options, [{
-    key: "handleRemoveAll",
-    value: function handleRemoveAll() {
-      console.log(this.props);
-      alert('remove');
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, this.props.options.map(function (option) {
-        return /*#__PURE__*/React.createElement(Option, {
-          key: option,
-          optionText: option
-        });
-      }), /*#__PURE__*/React.createElement("button", {
-        onClick: this.handleRemoveAll.bind(this)
-      }, "Remove All"));
-    }
-  }]);
-  return Options;
-}(React.Component);
-var Option = /*#__PURE__*/function (_React$Component5) {
-  _inherits(Option, _React$Component5);
-  var _super5 = _createSuper(Option);
-  function Option() {
-    _classCallCheck(this, Option);
-    return _super5.apply(this, arguments);
-  }
-  _createClass(Option, [{
-    key: "render",
-    value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, this.props.optionText);
-    }
-  }]);
-  return Option;
-}(React.Component);
-var AddOption = /*#__PURE__*/function (_React$Component6) {
-  _inherits(AddOption, _React$Component6);
-  var _super6 = _createSuper(AddOption);
-  function AddOption() {
+  }, "Remove"));
+};
+
+// class Option extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         {this.props.optionText}
+//       </div>
+//     )
+//   }
+// }
+var AddOption = /*#__PURE__*/function (_React$Component2) {
+  _inherits(AddOption, _React$Component2);
+  var _super2 = _createSuper(AddOption);
+  function AddOption(props) {
+    var _this2;
     _classCallCheck(this, AddOption);
-    return _super6.apply(this, arguments);
+    _this2 = _super2.call(this, props);
+    _this2.handleAddOption = _this2.handleAddOption.bind(_assertThisInitialized(_this2));
+    _this2.state = {
+      error: undefined
+    };
+    return _this2;
   }
   _createClass(AddOption, [{
-    key: "handleSubmit",
-    value: function handleSubmit(e) {
+    key: "handleAddOption",
+    value: function handleAddOption(e) {
       e.preventDefault();
       var option = e.target.elements.option.value.trim();
-      if (option) alert(option);
+      var error = this.props.handleAddOption(option);
+      this.setState(function () {
+        return {
+          error: error
+        };
+      });
+      if (!error) {
+        e.target.elements.option.value = '';
+      }
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("form", {
-        onSubmit: this.handleSubmit
+      return /*#__PURE__*/React.createElement("div", null, this.state.error && /*#__PURE__*/React.createElement("p", null, this.state.error), /*#__PURE__*/React.createElement("form", {
+        onSubmit: this.handleAddOption
       }, /*#__PURE__*/React.createElement("input", {
         type: "text",
         name: "option"
@@ -152,4 +234,7 @@ var AddOption = /*#__PURE__*/function (_React$Component6) {
   }]);
   return AddOption;
 }(React.Component);
+var User = function User(props) {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("p", null, "Name: ", props.name), /*#__PURE__*/React.createElement("p", null, "Age: ", props.age));
+};
 ReactDOM.render( /*#__PURE__*/React.createElement(IndecisionApp, null), document.getElementById('app'));
